@@ -36,13 +36,30 @@ export default {
     },
     methods: {
         editPost(id) {
+            this.showEditPost= true
+            this.editPostId=id
+            this.entry=this.posts[this.posts.length-Number(id)]['entry']
+            this.mood=this.posts[this.posts.length-Number(id)]['mood']
             
         },
         updatePost(event) {
+            axios.post(`${this.baseUrl}/updatepost`,{
+                    'entry':this.entry,
+                    'mood':this.selMood,
+            
+        }).then(response=>{
+
+            this.posts[this.posts.length-Number(this.editPostId)]['entry']=this.entry
+            this.posts[this.posts.length-Number(this.editPostId)]['mood']=this.mood
+            this.showEditPost= false
+        })
+        }
+
+
             
         }
     }
-}
+
 </script>
 
 <template>
@@ -61,7 +78,7 @@ export default {
                     <td>{{ post.id }}</td>
                     <td>{{ post.entry }}</td>
                     <td>{{ post.mood }}</td>
-                    <td><button>Edit</button></td>
+                    <td><button @click="editPost(post.id)">Edit</button></td>
                 </tr>
             </tbody>
 
@@ -82,7 +99,7 @@ export default {
                             <option v-for="mood in moods" :value="mood">{{ mood }}</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update Post</button>
+                    <button @click.prevent="updatePost" type="submit" class="btn btn-primary">Update Post</button>
                 </form>
             </div>
         </div>
