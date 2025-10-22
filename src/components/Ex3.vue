@@ -6,7 +6,7 @@ import axios from 'axios';
        // add code here
        data(){
         return {
-        moods:['happy','sad','angry'],
+        moods:['Happy','Sad','Angry'],
         selMood:'',
         subject:'',
         entry:'',
@@ -65,6 +65,7 @@ import axios from 'axios';
 
         <br>
         <button @click="addPost">Submit New Post</button>
+        <br>
         {{ outputMsg }}
 
         <hr> Click  <a><router-link to="/ViewPosts/">here</router-link></a>  to return to Main Page
