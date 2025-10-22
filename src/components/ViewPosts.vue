@@ -36,22 +36,24 @@ export default {
     },
     methods: {
         editPost(id) {
-            this.showEditPost= true
-            this.editPostId=id
-            this.entry=this.posts[this.posts.length-Number(id)]['entry']
-            this.mood=this.posts[this.posts.length-Number(id)]['mood']
-            
-        },
+            const p = this.posts.find(x => x.id === id)
+            if (!p) return
+            this.editPostId = id
+            this.entry = p.entry
+            this.mood  = p.mood
+            this.showEditPost = true
+            },
         updatePost(event) {
-            axios.post(`${this.baseUrl}/updatepost`,{
-                    'entry':this.entry,
-                    'mood':this.selMood,
-            
-        }).then(response=>{
+            axios.post(`${this.baseUrl}/updatePost`,{entry:this.entry,mood:this.mood},{params:{id:this.editPostId}})
+        .then(response=>{
 
-            this.posts[this.posts.length-Number(this.editPostId)]['entry']=this.entry
-            this.posts[this.posts.length-Number(this.editPostId)]['mood']=this.mood
+            this.posts[this.posts.length-Number(event)]['entry']=this.entry
+            this.posts[this.posts.length-Number(event)]['mood']=this.mood
+            console.log(response)
             this.showEditPost= false
+        })
+        .catch(error=>{
+            console.log(error)
         })
         }
 
@@ -99,7 +101,7 @@ export default {
                             <option v-for="mood in moods" :value="mood">{{ mood }}</option>
                         </select>
                     </div>
-                    <button @click.prevent="updatePost" type="submit" class="btn btn-primary">Update Post</button>
+                    <button @click.prevent="updatePost(editPostId)" type="submit" class="btn btn-primary">Update Post</button>
                 </form>
             </div>
         </div>
